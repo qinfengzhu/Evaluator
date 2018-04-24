@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalVarExpression", "LocalVarExpression\LocalVarExpression.csproj", "{06509F6E-EBE3-4967-BAEF-6F0725DE65AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evaluator", "Evaluator\Evaluator.csproj", "{1BB2E899-B6C0-46D6-A4DD-C9BAB8A57CFE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06509F6E-EBE3-4967-BAEF-6F0725DE65AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06509F6E-EBE3-4967-BAEF-6F0725DE65AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06509F6E-EBE3-4967-BAEF-6F0725DE65AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06509F6E-EBE3-4967-BAEF-6F0725DE65AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BB2E899-B6C0-46D6-A4DD-C9BAB8A57CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BB2E899-B6C0-46D6-A4DD-C9BAB8A57CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BB2E899-B6C0-46D6-A4DD-C9BAB8A57CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BB2E899-B6C0-46D6-A4DD-C9BAB8A57CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
