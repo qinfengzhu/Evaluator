@@ -14,3 +14,7 @@ Assert.AreEqual(expectPostFixExpression, postFixExpression);
 # 理论基础
 [逆波兰算法](/src/Evaluator/调度场算法.md)
 
+# 后续扩展功能
+
+后期会出，根据栈进行Expression(C#)动态的构建,扩展支持变量等功能
+
