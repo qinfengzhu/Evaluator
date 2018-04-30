@@ -1,7 +1,8 @@
 # Evaluator
 字符串表达式计算
 
-# 写法
+# 逆波兰转换测试
+
 ```csharp
 var parser = new EvalParser();
 string expression = "1+(2+3)*5-2+9/3";
@@ -14,7 +15,25 @@ Assert.AreEqual(expectPostFixExpression, postFixExpression);
 # 理论基础
 [逆波兰算法](/src/Evaluator/调度场算法.md)
 
-# 后续扩展功能
+# 计算调用
 
-后期会出，根据栈进行Expression(C#)动态的构建,扩展支持变量等功能
+1. 不传递参数的调用
+```csharp 
+var evalParser = new EvalParser();
+string expression = "9+(3-1)*3+10/2";
+decimal value = evalParser.Eval(expression);
+            
+Assert.AreEqual(20, value);
+```
+
+2. 传递参数的调用
+```csharp 
+var evalParser = new EvalParser();
+string expression = "a+b+c/2";
+decimal value = evalParser.Eval(expression, new { a = 5, b = 2, c = 6 });
+
+Assert.AreEqual(10, value);
+```
+
+
 

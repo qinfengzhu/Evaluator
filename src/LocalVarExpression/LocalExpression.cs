@@ -23,8 +23,7 @@ namespace LocalVarExpression
             {
                 var memberExpression = (MemberExpression)body;
 
-                var @object =
-                  ((ConstantExpression)(memberExpression.Expression)).Value; //这个是重点
+                var @object = ((ConstantExpression)(memberExpression.Expression)).Value; //这个是重点
 
                 if (memberExpression.Member.MemberType == MemberTypes.Field)
                 {

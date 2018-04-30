@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Evaluator
@@ -22,6 +24,11 @@ namespace Evaluator
         private static readonly OperatorChar MulOperatorChar = new OperatorChar() { Operator = MulOperator };
         private static readonly OperatorChar LBraceOperatorChar = new OperatorChar() { Operator = LBraceOperator };
         private static readonly OperatorChar RBraceOperatorChar = new OperatorChar() { Operator = RBraceOperator };
+        /// <summary>
+        /// 逆波兰-中缀表达式转换为后缀表达式
+        /// </summary>
+        /// <param name="expression">中缀表达式</param>
+        /// <returns></returns>
         public Queue<EvalItem> ParserInfixExpression(string expression)
         {
             var queue = new Queue<EvalItem>();
@@ -142,6 +149,98 @@ namespace Evaluator
             }
             return queue;
         }
+        /// <summary>
+        /// 计算表达式的计算结果
+        /// </summary>
+        /// <param name="expreesion">计算表达式</param>
+        /// <returns>计算的结果</returns>
+        public decimal Eval(string expreesion)
+        {
+            return Eval(expreesion, null);
+        }
+        /// <summary>
+        /// 计算表达式的计算结果
+        /// </summary>
+        /// <param name="expression">表达式</param>
+        /// <param name="dynamicObject">动态对象</param>
+        /// <returns>计算的结果</returns>
+        public decimal Eval(string expression,object dynamicObject)
+        {
+            var queue = ParserInfixExpression(expression);
+            var values = GetParameterValues(dynamicObject);
+
+            var cacheStack = new Stack<Expression>();
+            while (queue.Count > 0)
+            {
+                var item = queue.Dequeue();
+                if (item.ItemType == EItemType.Value && item.IsConstant)
+                {
+                    var itemExpression = Expression.Constant(item.Value);
+                    cacheStack.Push(itemExpression);
+                    continue;
+                }
+                if (item.ItemType == EItemType.Value && !item.IsConstant)
+                {
+                    var propertyName = item.Content;
+                    var propertyValue = values[propertyName];
+                    var itemExpression = Expression.Constant(propertyValue);
+                    cacheStack.Push(itemExpression);
+                }
+                if (item.ItemType == EItemType.Operator)
+                {
+                    var firstParamterExpression = cacheStack.Pop();
+                    var secondParamterExpression = cacheStack.Pop();
+                    switch (item.Content[0])
+                    {
+                        case EvalParser.AddOprator:
+                            var addExpression = Expression.Add(secondParamterExpression, firstParamterExpression);
+                            cacheStack.Push(addExpression);
+                            break;
+                        case EvalParser.DivOperator:
+                            var divExpression = Expression.Divide(secondParamterExpression, firstParamterExpression);
+                            cacheStack.Push(divExpression);
+                            break;
+                        case EvalParser.MulOperator:
+                            var mulExpression = Expression.Multiply(secondParamterExpression, firstParamterExpression);
+                            cacheStack.Push(mulExpression);
+                            break;
+                        case EvalParser.SubOperator:
+                            var subExpression = Expression.Subtract(secondParamterExpression, firstParamterExpression);
+                            cacheStack.Push(subExpression);
+                            break;
+                        default:
+                            throw new Exception("wrong operator");
+                    }
+                }
+            }
+            var lambdaExpression = Expression.Lambda<Func<decimal>>(cacheStack.Pop());
+            var value = lambdaExpression.Compile()();
+
+            return value;
+        }
+        /// <summary>
+        /// 获取动态对象的属性与值的键值对集合
+        /// </summary>
+        /// <param name="dynamicObject">动态对象</param>
+        /// <returns>属性与值的键值对集合</returns>
+        private Dictionary<string, decimal> GetParameterValues(object dynamicObject)
+        {
+            var values = new Dictionary<string, decimal>();
+            if (dynamicObject == null)
+                return values;
+           var properties = dynamicObject.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                var propertyValue = property.GetValue(dynamicObject);
+                values.Add(property.Name, Convert.ToDecimal(propertyValue));
+            }
+            return values;
+        }
+        /// <summary>
+        /// 打印逆波兰后缀表达式
+        /// </summary>
+        /// <param name="queue">后缀表达式队列</param>
+        /// <returns>后缀表达式字符串</returns>
         public string PrintPostfixExpression(Queue<EvalItem> queue)
         {
             StringBuilder text = new StringBuilder();
